@@ -8,6 +8,10 @@
 
     https://think-biq.com
 '''
+
+__all__ = ['Kjuar']
+
+
 import io
 import qrcode
 
