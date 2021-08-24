@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""    
+'''
     Utility to export google authenticator accounts.
 
     2021-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.
     See license.md for details.
 
     https://think-biq.com
-"""
+'''
 import io
 import qrcode
 
 
 class Kjuar():
+    '''
+    QR code ascii transcriber.
+    '''
 
     def __init__(self):
         self.qr = qrcode.QRCode()

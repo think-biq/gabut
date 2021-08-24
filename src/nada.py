@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''    
+    Utility to export google authenticator accounts.
+
+    2021-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.
+    See license.md for details.
+
+    https://think-biq.com
+'''
 
 import base64
 import hashlib
@@ -7,6 +17,9 @@ from Crypto.Util.Padding import pad, unpad
 
 
 class Nada:
+    '''
+    AES encryption helper class.
+    '''
 
     def __init__(self, key):
         self.key = hashlib.md5(key.encode('utf8')).digest()
