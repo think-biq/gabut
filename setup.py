@@ -36,7 +36,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     package_dir = {'gabut': 'src'},
-    packages=['otp_export'],
+    packages=['gabut'],
     include_package_data=True,    
     package_data={'gabut': ['']},
     classifiers=[

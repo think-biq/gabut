@@ -1,19 +1,20 @@
 
 import base64
 import hashlib
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import get_random_bytes
-from Cryptodome.Util.Padding import pad, unpad
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
 
 
 class Nada:
+
     def __init__(self, key):
         self.key = hashlib.md5(key.encode('utf8')).digest()
 
     def encrypt(self, raw_data):
         iv = get_random_bytes(AES.block_size)
         self.cipher = AES.new(self.key, AES.MODE_CBC, iv)
-        padded_data = pad(raw_data.encode('utf-8'), AES.block_size)
+        padded_data = pad(raw_data.encode('utf8'), AES.block_size)
         encrypted_data = self.cipher.encrypt(padded_data)
         msg = iv + encrypted_data
         encoded_msg = base64.b64encode(msg)
