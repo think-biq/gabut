@@ -9,4 +9,8 @@
     https://think-biq.com
 '''
 
-from .src import *
+from src.gabut import cli
+
+
+if __name__ == '__main__':
+    cli()

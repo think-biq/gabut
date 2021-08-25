@@ -9,7 +9,7 @@
     https://think-biq.com
 '''
 
-__all__ = ['gabut']
+__all__ = ['cli']
 
 
-from .gabut import cli as gabut
+from .cli import cli

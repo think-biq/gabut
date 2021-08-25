@@ -44,12 +44,6 @@ def create_output_from_accounts(args, accounts):
     output = ''
     if args.uri:
         for account in accounts:
-            uri = create_otp_uri(
-                account['type'], account['key'],
-                account['name'], account['issuer'], 
-                account['digits'], account['interval']
-            )
-            
             if args.verbose:
                 output += f"{account['name']} ({account['issuer']})"
 
@@ -58,7 +52,11 @@ def create_output_from_accounts(args, accounts):
                 k.add(uri)
                 output += str(k)
             else:
-                output += uri
+                output += create_otp_uri(
+                    account['type'], account['key'],
+                    account['name'], account['issuer'],
+                    account['digits'], account['interval']
+                )
     else:
         output += json.dumps(accounts)
     
