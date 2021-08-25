@@ -40,7 +40,7 @@ def create_otp_uri(otp_type, key, account_name, issuer, digits=6, interval=30, a
     return base + args
 
 
-def create_output_from_accounts(accounts):
+def create_output_from_accounts(args, accounts):
     output = ''
     if args.uri:
         for account in accounts:
@@ -97,7 +97,7 @@ def run_export_command(args):
 
         return 0
 
-    output = create_output_from_accounts(accounts)
+    output = create_output_from_accounts(args, accounts)
     print(output)
 
     return 0
@@ -125,7 +125,7 @@ def run_load_command(args):
 
             exported_accounts += file_accounts
 
-    output = create_output_from_accounts(exported_accounts)
+    output = create_output_from_accounts(args, exported_accounts)
     print(output)
 
     return 0

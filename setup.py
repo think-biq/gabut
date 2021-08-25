@@ -35,10 +35,13 @@ setuptools.setup(
     description="Google authenticator backup tool.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    package_dir = {'gabut': ['src']},
+    package_dir = {'gabut': 'src'},
     packages=['gabut'],
     include_package_data=True,    
     package_data={'gabut': ['']},
+    entry_points={
+        'console_scripts': ['gabut = src.cli:cli'],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
