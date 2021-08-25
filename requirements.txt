@@ -2,3 +2,4 @@ protobuf
 pillow
 qrcode
 pycryptodome
+pyzbar

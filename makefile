@@ -43,7 +43,7 @@ CMD_ACTIVATE_VENV = . "$(PROJECT_DIR)/$(VENV_BIN_DIR)/activate"
 CMD_DEACTIVATE_VENV = declare -f deactivate > /dev/null && deactivate || true
 
 
-all: prepare install-gaeh run
+all: prepare install-gaeh build-wheel
 
 prepare:
 	@$(CMD_DEACTIVATE_VENV); $(PYTHON) -m venv $(PROJECT_DIR)
@@ -68,17 +68,12 @@ install-gaeh: build-gaeh
 	$(CMD_ACTIVATE_VENV); $(PYTHON) -m pip install gaeh \
 		--force-reinstall --no-index --find-links="file://$(PROJECT_DIR)/dep/gaeh/dist"
 
-clean-python-justonce:
-	@$(CMD_ACTIVATE_VENV); make -C dep/python-justonce clean
+build-wheel:
+	$(CMD_ACTIVATE_VENV); python3 setup.py bdist_wheel
 
-build-python-justonce: clean-python-justonce
-	@$(CMD_ACTIVATE_VENV); make -C dep/python-justonce build
-
-install-python-justonce: build-python-justonce
-	@$(CMD_ACTIVATE_VENV); $(PYTHON) -m pip uninstall --yes justonce
-	$(CMD_ACTIVATE_VENV); $(PYTHON) -m pip install justonce \
-		--force-reinstall --no-index \
-		--find-links="file://$(PROJECT_DIR)/dep/python-justonce/build/src/python-justonce/package/dist"
+install-wheel: build-wheel
+	$(CMD_ACTIVATE_VENV); python3 -m pip install gaeh \
+		--force-reinstall --no-index --find-links="$(PROJECT_DIR)/dist"
 
 run:
-	$(CMD_ACTIVATE_VENV); $(PYTHON) src/main.py $(FILES)
+	$(CMD_ACTIVATE_VENV); $(PYTHON) -m src $(FILES)
