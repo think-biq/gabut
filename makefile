@@ -72,7 +72,7 @@ build-wheel:
 	$(CMD_ACTIVATE_VENV); python3 setup.py bdist_wheel
 
 install-wheel: build-wheel
-	$(CMD_ACTIVATE_VENV); python3 -m pip install gaeh \
+	$(CMD_ACTIVATE_VENV); python3 -m pip install gabut \
 		--force-reinstall --no-index --find-links="$(PROJECT_DIR)/dist"
 
 run:

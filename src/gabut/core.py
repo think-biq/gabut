@@ -47,16 +47,17 @@ def create_output_from_accounts(args, accounts):
             if args.verbose:
                 output += f"{account['name']} ({account['issuer']})"
 
+            uri = create_otp_uri(
+                account['type'], account['key'],
+                account['name'], account['issuer'],
+                account['digits'], account['interval']
+            )
             if args.qr:
                 k = Kjuar()
                 k.add(uri)
                 output += str(k)
             else:
-                output += create_otp_uri(
-                    account['type'], account['key'],
-                    account['name'], account['issuer'],
-                    account['digits'], account['interval']
-                )
+                output += uri
     else:
         output += json.dumps(accounts)
     

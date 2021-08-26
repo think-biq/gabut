@@ -47,7 +47,7 @@ setuptools.setup(
     include_package_data=False,
     package_data={},
     entry_points={
-        'console_scripts': ['gabut = src.gabut.cli:cli'],
+        'console_scripts': ['gabut = gabut.cli:cli'],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
