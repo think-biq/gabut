@@ -12,4 +12,4 @@
 __all__ = ['gabut']
 
 
-from .gabut import cli as gabut
+from . import gabut

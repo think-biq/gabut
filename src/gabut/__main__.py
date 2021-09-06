@@ -9,8 +9,8 @@
     https://think-biq.com
 '''
 
-from .cli import cli
+from . import cli
 
 
 if __name__ == '__main__':
-    cli()
+    cli.main()

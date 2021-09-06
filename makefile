@@ -68,7 +68,7 @@ install-gaeh: build-gaeh
 	$(CMD_ACTIVATE_VENV); $(PYTHON) -m pip install gaeh \
 		--force-reinstall --no-index --find-links="file://$(PROJECT_DIR)/dep/gaeh/dist"
 
-build-wheel:
+build-wheel: install-gaeh
 	$(CMD_ACTIVATE_VENV); python3 setup.py bdist_wheel
 
 install-wheel: build-wheel

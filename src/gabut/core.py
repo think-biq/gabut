@@ -9,7 +9,7 @@
     https://think-biq.com
 '''
 
-__all__ = ['run_load_command', 'run_export_command']
+__all__ = ['export_otpauth_uri_from_qr_image', 'create_otp_uri', 'export', 'load']
 
 
 import sys
@@ -18,13 +18,9 @@ import json
 import urllib.parse
 from PIL import Image
 from pyzbar import pyzbar
-from getpass import getpass
-from .nada import Nada
-from .kjuar import Kjuar
-from .version import version as get_version
 
 
-def export_otpauth_from_qr_image(file_path):
+def export_otpauth_uri_from_qr_image(file_path):
     img = Image.open(file_path)
     otpauth_exports = []
     for recognition in pyzbar.decode(img):
@@ -40,36 +36,17 @@ def create_otp_uri(otp_type, key, account_name, issuer, digits=6, interval=30, a
     return base + args
 
 
-def create_output_from_accounts(args, accounts):
-    output = ''
-    if args.uri:
-        for account in accounts:
-            if args.verbose:
-                output += f"{account['name']} ({account['issuer']})"
-
-            uri = create_otp_uri(
-                account['type'], account['key'],
-                account['name'], account['issuer'],
-                account['digits'], account['interval']
-            )
-            if args.qr:
-                k = Kjuar()
-                k.add(uri)
-                output += str(k)
-            else:
-                output += uri
-    else:
-        output += json.dumps(accounts)
-    
-    return output
+def recognize(img_path):
+    '''Recognizes google authenticator backup url from qr image. Returns a list.'''
+    return export_otpauth_uri_from_qr_image(img_path)
 
 
-def run_export_command(args):
+def export(img_path):
     exported_accounts = []
-    for img_path in args.file:
-        for url in export_otpauth_from_qr_image(img_path):
-            exports = gaeh.export_otp_accounts(url)
-            exported_accounts += exports['accounts']
+
+    for url in recognize(img_path):
+        exports = gaeh.export_otp_accounts(url)
+        exported_accounts += exports['accounts']
 
     accounts = []
     for raw_account in exported_accounts:
@@ -83,48 +60,20 @@ def run_export_command(args):
             'counter': raw_account['counter'],
             'interval': 30
         }
-
         accounts.append(account)
 
-    if args.encrypt:
-        password = args.password
-        if password is None:
-            password = getpass()
-        cipher = Nada(password)
-        encrypted = cipher.encrypt(json.dumps(accounts))
-        print(encrypted.decode('utf8'))
-
-        return 0
-
-    output = create_output_from_accounts(args, accounts)
-    print(output)
-
-    return 0
+    return accounts
 
 
-def run_load_command(args):
-    cipher = None
-    if args.decrypt:
-        password = args.password
-        if None is password:
-            password = getpass()
-        cipher = Nada(password)
+def load(file, decryption_function = None):
+    accounts = []
+    with open(file, 'rb') as f:
+        contents = f.read()
+        if decryption_function:
+            contents = decryption_function(contents)
+        try:
+            accounts += json.loads(contents)
+        except json.decoder.JSONDecodeError as e:
+            raise Exception(f'File contents is no valid json! ({e})')
 
-    exported_accounts = []
-    for file_path in args.file:
-        with open(file_path, 'rb') as f:
-            contents = f.read()
-            if cipher:
-                contents = cipher.decrypt(contents).decode('utf8')
-            try:
-                file_accounts = json.loads(contents)
-            except json.decoder.JSONDecodeError as e:
-                eprint(f'File contents is no valid json! ({e})')
-                return 1
-
-            exported_accounts += file_accounts
-
-    output = create_output_from_accounts(args, exported_accounts)
-    print(output)
-
-    return 0
+    return accounts

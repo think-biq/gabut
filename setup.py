@@ -12,11 +12,7 @@
 import setuptools
 import setuptools.dist
 import os
-
-
-def get_version():
-    from src.gabut.version import version
-    return version()
+from src.gabut.cli import get_version
 
 
 def get_long_description():
@@ -47,7 +43,7 @@ setuptools.setup(
     include_package_data=False,
     package_data={},
     entry_points={
-        'console_scripts': ['gabut = gabut.cli:cli'],
+        'console_scripts': ['gabut = gabut.cli:main'],
     },
     classifiers=[
         "Programming Language :: Python :: 3",

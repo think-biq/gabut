@@ -9,7 +9,6 @@
     https://think-biq.com
 '''
 
-__all__ = ['cli']
+__all__ = ['cli', 'core']
 
-
-from .cli import cli
+from . import cli, core
